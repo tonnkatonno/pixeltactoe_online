@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PixelTacToe.Shared", "PixelTacToe.Shared\PixelTacToe.Shared.fsproj", "{45B03B54-AFDA-4F28-91D8-CE9A41886F28}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PixelTacToe.Server", "PixelTacToe.Server\PixelTacToe.Server.fsproj", "{1CA4EEA8-BA69-4D73-9094-6A67CB738243}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PixelTacToe.Client", "PixelTacToe.Client\PixelTacToe.Client.fsproj", "{57ECDCE2-9D1B-42F7-BD1A-9A8CECBD9138}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45B03B54-AFDA-4F28-91D8-CE9A41886F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B03B54-AFDA-4F28-91D8-CE9A41886F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B03B54-AFDA-4F28-91D8-CE9A41886F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B03B54-AFDA-4F28-91D8-CE9A41886F28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CA4EEA8-BA69-4D73-9094-6A67CB738243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CA4EEA8-BA69-4D73-9094-6A67CB738243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CA4EEA8-BA69-4D73-9094-6A67CB738243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CA4EEA8-BA69-4D73-9094-6A67CB738243}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57ECDCE2-9D1B-42F7-BD1A-9A8CECBD9138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57ECDCE2-9D1B-42F7-BD1A-9A8CECBD9138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57ECDCE2-9D1B-42F7-BD1A-9A8CECBD9138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57ECDCE2-9D1B-42F7-BD1A-9A8CECBD9138}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

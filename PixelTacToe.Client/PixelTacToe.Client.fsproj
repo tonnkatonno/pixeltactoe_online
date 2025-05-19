@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+<PropertyGroup>
+  <EnableDefaultContentItems>false</EnableDefaultContentItems>
+</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Include only Program.fs -->
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\js\app.js" CopyToPublishDirectory="Always" />
+    <Content Include="wwwroot\js\game.js" CopyToPublishDirectory="Always" />
+    <Content Include="wwwroot\css\site.css" CopyToPublishDirectory="Always" />
+    <Content Include="wwwroot\css\game.css" />
+    <Content Include="wwwroot\game.html" />
+  </ItemGroup>
+
+</Project>
