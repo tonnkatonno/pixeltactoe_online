@@ -4,7 +4,6 @@ const defaultImg = '/img/default-player.png';
 const preview     = document.getElementById('preview');
 const fileInput   = document.getElementById('fileInput');
 const nameInput   = document.getElementById('nameInput');
-const defaultBtn  = document.getElementById('defaultBtn');
 const createBtn   = document.getElementById('createBtn');
 const statusLbl   = document.getElementById('status');
 const lobbyUl     = document.getElementById('lobbyList');
@@ -29,11 +28,6 @@ fileInput.addEventListener('change', e => {
   const r = new FileReader();
   r.onload = ev => (preview.src = ev.target.result);
   r.readAsDataURL(f);
-});
-
-defaultBtn.addEventListener('click', () => {
-  preview.src = defaultImg;
-  fileInput.value = '';
 });
 
 createBtn.addEventListener('click', async () => {
