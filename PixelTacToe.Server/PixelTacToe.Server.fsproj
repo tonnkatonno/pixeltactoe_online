@@ -6,25 +6,14 @@
   <ItemGroup>
     <Folder Include="wwwroot\uploads\" />
     <Compile Include="Helpers\Shared.fs" />
+    <Compile Include="Helpers\GameConstants.fs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DbModels.fs" />
-    <!-- Temporarily commenting out problematic files to get the server running -->
-    <!-- <Compile Include="Services\PlayerRepository.fs" /> -->
-    <!-- <Compile Include="Services\GameRepository.fs" /> -->
-    <!-- <Compile Include="Services\GameService.fs" /> -->
-    <Compile Include="WebSockets\WebSocketHandler.fs" />
-    <Compile Include="WebSockets\WebSocketMiddleware.fs" />
-    <!-- <Compile Include="Controllers\PlayerController.fs" /> -->
-    <!-- <Compile Include="Controllers\GameHistoryController.fs" /> -->
+    <Folder Include="WebSockets\" />
     <Compile Include="Controllers\CreatePlayerController.fs" />
     <Compile Include="Controllers\PlayersController.fs" />
     <Compile Include="Controllers\GameController.fs" />
     <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PixelTacToe.Shared\PixelTacToe.Shared.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +26,5 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
   </ItemGroup>
-
-
 
 </Project> 

@@ -16,6 +16,7 @@
     <Content Include="wwwroot\js\app.js" CopyToPublishDirectory="Always" />
     <Content Include="wwwroot\js\game.js" CopyToPublishDirectory="Always" />
     <Content Include="wwwroot\css\site.css" CopyToPublishDirectory="Always" />
+    <Content Include="wwwroot\img\default-player.png" CopyToPublishDirectory="Always" />
     <Content Include="wwwroot\css\game.css" />
     <Content Include="wwwroot\game.html" />
   </ItemGroup>
