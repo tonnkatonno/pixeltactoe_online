@@ -1,14 +1,11 @@
 namespace PixelTacToe.Server
 
-open System
 open System.IO
-open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.FileProviders
 open Microsoft.Extensions.Hosting
-open PixelTacToe.Server.WebSockets
 
 module Program =
 
@@ -16,6 +13,7 @@ module Program =
     let main args =
 
         let builder = WebApplication.CreateBuilder args
+  
 
         builder.Services.AddControllers()         |> ignore
         builder.Services.AddEndpointsApiExplorer()|> ignore
@@ -30,6 +28,15 @@ module Program =
                  |> ignore)) |> ignore
 
         let app = builder.Build()
+        
+        let clearAndEnsure dirs =
+            for relativePath in dirs do
+                let fullPath = Path.Combine(app.Environment.ContentRootPath, "wwwroot", relativePath)
+                if Directory.Exists fullPath then
+                    Directory.Delete(fullPath, true)
+                Directory.CreateDirectory(fullPath) |> ignore
+
+        clearAndEnsure [ "game"; "uploads" ]
 
         if app.Environment.IsDevelopment() then
             app.UseSwagger()   |> ignore
@@ -59,17 +66,6 @@ module Program =
         app.UseAuthorization() |> ignore
 
         app.UseWebSockets() |> ignore
-
-        app.Use(fun (ctx: HttpContext) (next: Func<Task>) ->
-            if  ctx.Request.Path =
-                PathString PixelTacToe.Shared.Constants.GameConstants.WebSocketEndpoint
-                && ctx.WebSockets.IsWebSocketRequest then
-                task {
-                    let! socket = ctx.WebSockets.AcceptWebSocketAsync()
-                    do! WebSocketHandler.handleWebSocket ctx socket
-                } :> Task
-            else
-                next.Invoke() ) |> ignore
 
         app.MapControllers() |> ignore
 

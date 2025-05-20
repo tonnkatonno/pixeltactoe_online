@@ -10,7 +10,6 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.Configuration
 
 open PixelTacToe.Server.Helpers.Shared
-open PixelTacToe.Shared.PlayerModel
 
 [<CLIMutable>]
 type CreatePlayerDto =
@@ -61,7 +60,8 @@ type CreatePlayerController
                       ImageUrl   = $"/uploads/{fileName}"
                       InGame     = false
                       MatchRequestBy = []
-                      CurrentGameId  = None}  
+                      CurrentGameId  = None
+                      LastSeenUtc    = DateTime.UtcNow}  
 
                 let jsonOpts = JsonSerializerOptions(WriteIndented = true)
                 let jsonPath = Path.ChangeExtension(imgPath, ".json")

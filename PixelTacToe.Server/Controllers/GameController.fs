@@ -7,7 +7,6 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
 open PixelTacToe.Server.Helpers.Shared
-open PixelTacToe.Shared.PlayerModel     
 
 [<CLIMutable>]
 type MoveDto =

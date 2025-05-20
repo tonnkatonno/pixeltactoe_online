@@ -8,14 +8,12 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
 open PixelTacToe.Server.Helpers.Shared
-open PixelTacToe.Shared.PlayerModel
 
 [<ApiController>]
 [<Route("api/[controller]")>]
 type PlayersController(cfg : IConfiguration, log : ILogger<PlayersController>) =
     inherit ControllerBase()
 
-    // ---------- 1)  GET /api/players/{myId}/matchrequests ----------
     [<HttpGet("{myId}/matchrequests")>]
     member _.GetMatchRequests(myId : string) : IActionResult =
         let jsonPath =
@@ -28,7 +26,6 @@ type PlayersController(cfg : IConfiguration, log : ILogger<PlayersController>) =
             let meta = JsonSerializer.Deserialize<PlayerMeta>(fs, opts)
             base.Ok meta.MatchRequestBy
 
-    // 2)  POST /api/players/{targetId}/matchrequest
     [<HttpPost("{targetId}/matchrequest")>]
     member this.PostMatchRequest(targetId : string,
                                  [<FromBody>] requesterId : string)
@@ -67,7 +64,6 @@ type PlayersController(cfg : IConfiguration, log : ILogger<PlayersController>) =
                 return controllerBase.StatusCode(500, "PostMatchRequest failed") :> IActionResult
     }
 
-    // 3) POST /api/players/{targetId}/acceptmatchrequest
     [<HttpPost("{targetId}/acceptmatchrequest")>]
     member _.AcceptMatchRequest
             (targetId : string,
@@ -137,30 +133,30 @@ type PlayersController(cfg : IConfiguration, log : ILogger<PlayersController>) =
                 base.Ok {| gameId = gameId |}
 
         
-    // 4)  GET /api/players/lobby
     [<HttpGet("players/lobby")>]
     member _.GetPlayersInLobby() : IActionResult =
-        let uploads   =  PixelTacToe.Server.Helpers.Shared.UploadHelpers.getUploadPath cfg
+        let uploads   =  UploadHelpers.getUploadPath cfg
         let jsonFiles = Directory.EnumerateFiles(uploads, "*.json")
         let opts      = JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+        let onlineWindow = TimeSpan.FromSeconds 30.0  // e.g. 30s
+        let now = DateTime.UtcNow
 
         let players =
             jsonFiles
             |> Seq.choose (fun path ->
                 try
                     use fs = File.OpenRead path
-                    let p = JsonSerializer.Deserialize<PixelTacToe.Shared.PlayerModel.PlayerMeta>(fs, opts)
-                    if not p.InGame then
-                         Some {| id       = Path.GetFileNameWithoutExtension path
-                                 name     = p.PlayerName
-                                 imageUrl = p.ImageUrl |}
+                    let p = JsonSerializer.Deserialize<PlayerMeta>(fs, opts)
+                    if not p.InGame && (now - p.LastSeenUtc) <= onlineWindow then
+                                Some {| id       = Path.GetFileNameWithoutExtension path
+                                        name     = p.PlayerName
+                                        imageUrl = p.ImageUrl |}
                     else None
                 with _ -> None)
             |> Seq.toList
         base.Ok players
         
 
-    // 5)  GET /api/players/leaderboard
     [<HttpGet("players/leaderboard")>]
     member _.Leaderboard() : IActionResult =
         let uploads = UploadHelpers.getUploadPath cfg
@@ -195,4 +191,25 @@ type PlayersController(cfg : IConfiguration, log : ILogger<PlayersController>) =
             |> Seq.toList
 
         base.Ok(leaders) :> IActionResult
+        
+    [<HttpPost("{myId}/heartbeat")>]
+    member _.Heartbeat (myId: string) : IActionResult =
+        let jsonPath = Path.Combine(UploadHelpers.getUploadPath cfg, $"{myId}.json")
+        if not (File.Exists jsonPath) then
+            base.NotFound $"Player {myId} not found"
+        else
+            use fs = new FileStream(jsonPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+            let opts = JsonSerializerOptions(PropertyNameCaseInsensitive = true)
+            let meta = JsonSerializer.Deserialize<PlayerMeta>(fs, opts)
+
+            // update LastSeenUtc
+            let updated = { meta with LastSeenUtc = DateTime.UtcNow }
+
+            fs.SetLength 0L
+            fs.Position <- 0L
+            JsonSerializer.Serialize(fs, updated, opts)
+            fs.Flush()
+
+            base.Ok()
+
 
