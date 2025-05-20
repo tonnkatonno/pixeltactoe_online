@@ -1,4 +1,4 @@
-﻿const API  = 'http://109.122.217.232:5246';
+﻿const API  = 'http://localhost:5246';
 
 const gameId = new URLSearchParams(location.search).get('id');
 if (!gameId) { alert('missing gameId'); throw 'no id'; }

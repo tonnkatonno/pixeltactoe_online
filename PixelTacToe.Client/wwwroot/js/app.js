@@ -1,4 +1,4 @@
-﻿const API_BASE   = 'http://109.122.217.232:5246';
+﻿const API_BASE   = 'http://localhost:5246';
 const defaultImg = '/img/default-player.png';
 
 const preview     = document.getElementById('preview');
