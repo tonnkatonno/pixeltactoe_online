@@ -6,6 +6,7 @@ A simple, browser-based Tic-Tac-Toe game built with an F# ASP.NET Core backend a
 
 Browse to [http://109.122.217.232:5000/](http://109.122.217.232:5000/) to try out.
 
+![img.png](img.png)
 ## Features
 
 - **User Registration**: Upload a profile image and choose a display name.
