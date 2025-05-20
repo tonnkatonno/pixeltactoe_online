@@ -1,7 +1,9 @@
 ﻿namespace PixelTacToe.Server.Helpers.Shared
 
+open System
 open System.IO
 open Microsoft.Extensions.Configuration
+open System.Text.Json.Serialization
 
 type PlayerStats =
     { Wins   : int
@@ -29,3 +31,13 @@ module UploadHelpers =
         let g = Path.Combine(uploads, "..", "games") |> Path.GetFullPath
         if not (Directory.Exists g) then Directory.CreateDirectory g |> ignore
         g
+
+[<CLIMutable>]
+type PlayerMeta =
+  { [<JsonPropertyName("playerName")>] PlayerName : string
+    [<JsonPropertyName("imageUrl")  >] ImageUrl   : string
+    [<JsonPropertyName("inGame")    >] InGame     : bool
+    [<JsonPropertyName("matchRequestBy")>]
+    MatchRequestBy : string list
+    CurrentGameId  : string option
+    LastSeenUtc    : DateTime }
