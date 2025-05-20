@@ -9,7 +9,7 @@ const createBtn   = document.getElementById('createBtn');
 const statusLbl   = document.getElementById('status');
 const lobbyUl     = document.getElementById('lobbyList');
 const requestUl   = document.getElementById('requestList');
-const leadersUl = document.getElementById('leaders');
+const leadersUl   = document.getElementById('leaders');
 
 (function preloadForm(){
   const storedName = localStorage.getItem('lastName');
@@ -20,6 +20,7 @@ const leadersUl = document.getElementById('leaders');
 
 let myId = sessionStorage.getItem('myId') || null;
 let pollId = null;
+let heartbeatId = null;
 const lobbyCache = new Map();
 
 fileInput.addEventListener('change', e => {
@@ -67,8 +68,8 @@ createBtn.addEventListener('click', async () => {
     if (!pollId) pollId = setInterval(() => {
       refreshLobby();
       refreshRequests();
-    }, 2500);       
-    
+    }, 2500);
+
   } catch (err) {
     statusLbl.textContent = '❌ ' + err.message;
     console.error(err);
@@ -148,10 +149,10 @@ async function sendMatchRequest (targetId) {
           headers: { 'Content-Type':'application/json' },
           body: JSON.stringify(myId)
         });
-        if (res.ok) {
-          waitForGameStart();
-        } 
-    
+    if (res.ok) {
+      waitForGameStart();
+    }
+
   } catch (e) { console.error(e); }
 }
 
@@ -163,7 +164,7 @@ async function waitForGameStart () {
       if (!res.ok) return;
 
       const meta = await res.json();
-      
+
       if (meta.CurrentGameId) {
         clearInterval(poll);
         location.href = `/game.html?id=${meta.CurrentGameId}`;
@@ -181,7 +182,7 @@ async function refreshRequests () {
   try {
     const res = await fetch(`${API_BASE}/api/Players/${myId}/matchrequests`);
     if (!res.ok) return;
-    const ids = await res.json(); 
+    const ids = await res.json();
 
     requestUl.innerHTML = '';
     ids.forEach(id => {
@@ -237,6 +238,7 @@ async function refreshLeaderboard () {
     });
   }catch(e){ console.error(e); }
 }
+
 setInterval(refreshLeaderboard, 5000);
 refreshLeaderboard();
 
@@ -245,13 +247,13 @@ refreshLeaderboard();
 
   await refreshLobby();
   await refreshRequests();
-  
- if (!pollId)
- pollId = setInterval(() => {
-     refreshLobby();
-     refreshRequests();
-   }, 2500);
- 
+
+  if (!pollId)
+    pollId = setInterval(() => {
+      refreshLobby();
+      refreshRequests();
+    }, 2500);
+
   try{
     const res = await fetch(`${API_BASE}/uploads/${myId}.json`,
         { cache:'no-cache' });
@@ -262,4 +264,20 @@ refreshLeaderboard();
       }
     }
   }catch(e){ console.error(e); }
+
+  function sendHeartbeat() {
+    if (!myId) return;
+    fetch(`${API_BASE}/api/Players/${myId}/heartbeat`, { method: 'POST' })
+        .catch(console.error);
+  }
+
+  sendHeartbeat();
+  heartbeatId = setInterval(sendHeartbeat, 10000);
+
+  window.addEventListener('beforeunload', () => {
+    clearInterval(heartbeatId);
+    navigator.sendBeacon(
+        `${API_BASE}/api/Players/${myId}/heartbeat`
+    );
+  });
 })();
