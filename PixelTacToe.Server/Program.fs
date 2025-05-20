@@ -21,7 +21,7 @@ module Program =
 
         builder.Services.AddCors(fun o ->
             o.AddPolicy("ClientCors", fun p ->
-                p.WithOrigins("http://109.122.217.232:5000")
+                p.WithOrigins("http://localhost:5000")
                  .AllowAnyHeader()
                  .AllowAnyMethod()
                  .AllowCredentials()
