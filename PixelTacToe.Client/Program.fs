@@ -48,7 +48,6 @@ let main args =
     </div>
 
     <div class="section action-row">
-      <button id="defaultBtn"  class="btn btn-secondary">Use default image</button>
       <button id="createBtn"   class="btn btn-primary">Create Player</button>
       <span   id="status"></span>
     </div>
